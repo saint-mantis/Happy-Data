@@ -1,0 +1,229 @@
+Topic – Assignment
+Happy Data Project
+BITS ID NAME
+2023ED15028 Arun K Babu
+2023ED15005 Sreeya Sarkar
+2023ED15010 Naveen A
+Happy Data - Product Specification Document
+1. Problem Statement and Goals
+The Problem
+In today's interconnected world, understanding the relationship between economic
+development and human happiness has become crucial. However, accessing and interpreting
+this data is challenging for students, researchers, and curious individuals. Current solutions
+either provide raw data without visualization or focus on single metrics without showing
+correlations.
+We noticed during our research that most existing platforms are either too complex for
+educational use or too simplified to provide meaningful insights. Students studying
+development economics or sustainability often struggle to find platforms that can help them
+explore these relationships in an intuitive way.
+Our Goals
+Happy Data aims to bridge this gap by providing:
+ An accessible platform for exploring happiness and development correlations
+ Clear visualizations that help users understand complex relationships
+ Educational insights for students studying sustainability and development
+ A tool that promotes data-driven understanding of global well-being
+2. Requirements Gathering Process
+Approach
+We followed a systematic approach to understand user needs through AI-assisted persona
+development and informal discussions.
+AI-Assisted Persona Development and Requirements Analysis
+We extensively used AI to roleplay di erent user types and systematically gather requirements:
+Academic Researcher Persona:
+ Needs: Detailed trend analysis, correlation insights, data export capabilities
+ Pain points: Limited time to process raw data from multiple sources
+ Goals: Research publications, teaching material preparation
+High School Student Persona:
+ Needs: Simple visualizations, clear explanations, mobile-friendly interface
+ Pain points: Complex terminology, overwhelming data presentations
+ Goals: School projects, general knowledge building
+Curious Citizen Persona:
+ Needs: Quick insights, country comparisons, intuitive navigation
+ Pain points: Technical barriers, unclear data sources
+ Goals: Personal learning, informed discussions
+This process helped us identify that users want simplicity without sacrificing depth, and
+regional comparisons are particularly valuable for educational use.
+3. Target User Personas
+Primary Persona: Priya - The Development Studies Student
+ Age: 21, Final year Economics student
+ Background: Interested in sustainable development, working on thesis about
+happiness economics
+ Tech comfort: Moderate, uses basic data tools but not programming
+ Goals: Understanding correlation patterns, creating visualizations for presentations
+ Frustrations: Existing tools are either too basic or require technical expertise
+ Quote: "I need something that shows me the story behind the numbers"
+Secondary Persona: Rahul - The Social Science Teacher
+ Age: 35, Teaching social sciences at higher secondary level
+ Background: 10 years teaching experience, passionate about global awareness
+ Tech comfort: Basic to moderate, comfortable with educational technology
+ Goals: Engaging classroom demonstrations, student project guidance
+ Frustrations: Most platforms are not suitable for classroom use
+ Quote: "My students learn better when they can see the data, not just read about it"
+Tertiary Persona: Anjali - The Curious Professional
+ Age: 28, Marketing professional with interest in global a airs
+ Background: MBA graduate, follows international news and trends
+ Tech comfort: High, comfortable with various online tools
+ Goals: Personal learning, informed discussions with peers
+ Frustrations: Finding reliable, easy-to-understand comparative data
+ Quote: "I want to understand the world better, but I don't have time for complex
+research"
+4. Key User Needs Analysis
+Based on our research, we identified these critical user needs:
+Functional Needs
+1. Trend Visualization: Users want to see how indicators change over time for specific
+countries
+2. Correlation Analysis: Understanding relationship between happiness and
+development indicators
+3. Regional Comparison: Comparing countries within regions for better context
+4. Simple Interface: Clean, intuitive design that doesn't overwhelm users
+5. Multiple Data Views: Di erent visualization types for di erent analysis needs
+Technical Needs
+1. Fast Loading: Quick access to visualizations without long wait times
+2. Mobile Friendly: Responsive design for di erent devices
+3. Reliable Data: Consistent access to updated, accurate information
+4. Export Options: Ability to save or share visualizations
+Educational Needs
+1. Clear Labels: Easy-to-understand terminology and explanations
+2. Context Information: Background about data sources and limitations
+3. Guided Exploration: Logical flow that helps users discover insights
+5. User Stories and Product Backlog
+Epic 1: Country Data Visualization (Priority: High)
+User Stories:
+1. As a student, I want to select a country from a dropdown so that I can focus on specific
+country analysis
+2. As a researcher, I want to choose development indicators so that I can analyze specific
+metrics
+3. As a user, I want to see trend line charts so that I can understand changes over time
+4. As an educator, I want to display data for multiple years so that I can show historical
+patterns
+Epic 2: Happiness Correlation Analysis (Priority: High)
+User Stories:
+1. As a student, I want to overlay happiness and indicator data so that I can identify
+relationships
+2. As a researcher, I want dual-axis comparison charts so that I can analyze di erent
+scales together
+3. As a user, I want to see correlation strength indicators so that I can understand
+relationship significance
+Epic 3: Regional Happiness Analytics (Priority: Medium)
+User Stories:
+1. As an educator, I want regional happiness maps so that I can demonstrate global
+patterns
+2. As a student, I want to compare happiness across regions so that I can understand
+regional di erences
+3. As a user, I want to filter by World Bank regions so that I can focus on specific areas
+Epic 4: Regional Indicator Comparison (Priority: Medium)
+User Stories:
+1. As a researcher, I want to filter countries by region and year so that I can make fair
+comparisons
+2. As a student, I want country comparison charts so that I can see relative performance
+3. As a user, I want to rank countries within regions so that I can identify leaders and
+laggards
+Epic 5: India Dashboard (Priority: Low - Extra Credit)
+User Stories:
+1. As an Indian student, I want India-specific dashboard so that I can focus on local
+context
+2. As a researcher, I want year range filters so that I can analyze specific time periods
+3. As a user, I want key India indicators displayed so that I can understand local happiness
+factors
+Prioritization Rationale:
+ High priority items enable core functionality needed by all user types
+ Medium priority items add analytical depth for advanced users
+ Low priority items provide specialized views for specific audiences
+6. Proposed Functional Solution
+Core Platform Features
+1. Interactive Dashboard
+ Clean, modern interface with intuitive navigation
+ Country and indicator selection dropdowns with search functionality
+ Dynamic chart generation based on user selections
+ Responsive design for desktop and mobile use
+2. Visualization Components
+ Line charts for trend analysis over time
+ Dual-axis charts for correlation comparison
+ Regional maps for geographical context
+ Bar charts for country comparisons within regions
+3. Data Integration
+ Real-time data fetching from World Bank API
+ Integration with World Happiness Report data
+ Automatic data validation and error handling
+ Caching mechanism for improved performance
+4. User Experience Features
+ Loading indicators for data processing
+ Clear error messages for failed operations
+ Help tooltips for complex features
+ Export functionality for charts and data
+User Journey Flow
+1. Landing Page: User understands platform purpose and capabilities
+2. Country Selection: User chooses country of interest
+3. Indicator Selection: User picks development indicator to analyze
+4. Visualization Generation: System displays relevant charts
+5. Analysis Enhancement: User can add happiness correlation, change time periods
+6. Regional Context: User can switch to regional view for broader comparison
+7. Export/Share: User can save insights for later use
+7. System Architecture
+Frontend: Web Application
+ Plain HTML, CSS, and JavaScript for maximum compatibility
+ Responsive CSS3 for mobile-friendly design
+ Chart.js for interactive visualizations
+ Vanilla JavaScript for DOM manipulation and API calls
+Backend: Django Framework
+ Django REST API for data processing and management
+ Models for storing processed data and user sessions
+ Views for handling API requests and serving frontend
+ Django ORM for database operations
+Database:
+ SQLite for development
+ Stores processed World Bank data for faster access
+ Caches happiness report data to reduce external API calls
+Data Sources:
+ World Bank Indicators API (primary development data)
+ World Happiness Report data (happiness metrics)
+ World Bank Country Classification (regional groupings)
+Data Flow
+1. 2. 3. 4. 5. User accesses Django application → Django serves HTML templates
+Frontend JavaScript makes AJAX calls → Django API endpoints process requests
+Django fetches data from database or external APIs → Data processed and returned as
+JSON
+Frontend receives JSON data → Chart.js renders visualizations
+User interactions trigger new API calls → Dynamic updates without page refresh
+8. Technical Considerations and Constraints
+Technology Stack Rationale
+ Django: Robust Python framework with excellent API capabilities and ORM
+ Plain HTML/CSS/JS: Maximum compatibility, no framework dependencies, easier
+debugging
+ Chart.js: Free, well-documented charting library with good mobile support
+ SQLite: Reliable database options, SQLite for development
+ Django REST Framework: Clean API development with built-in serialization
+Technical Constraints
+ External API Dependencies: Reliant on World Bank API availability and rate limits
+ Data Processing: Backend handles data transformation, frontend focuses on
+presentation
+ Database Storage: Need to manage data updates and synchronization with external
+sources
+ Session Management: Django handles user sessions and temporary data storage
+ Deployment: Requires server environment capable of running Django applications
+Scope Limitations
+In Scope:
+ 5 core visualization types as specified
+ Basic data filtering and selection
+ Responsive web interface
+ Export functionality for charts
+Out of Scope:
+ User authentication and personalization
+ Data upload/import functionality
+ Advanced statistical analysis
+ Real-time data updates
+ Mobile app development
+10. Next Steps
+Phase 2 Preparation
+1. Design Document Creation: Detailed technical specifications
+2. Technology Setup: Development environment and tool selection
+3. Sprint Planning: Breaking down user stories into development tasks
+4. Quality Assurance: Testing strategy and acceptance criteria definition
+Implementation Priority
+1. Core Infrastructure: Basic application structure and API integration
+2. Primary Visualizations: Country trends and happiness correlation features
+3. Regional Analytics: Map-based and comparison visualizations
+4. User Experience: Polish, error handling, and export functionality
+5. India Dashboard: Extra credit feature if time permits
+This specification serves as our roadmap for Phase 2 development, ensuring we build a product
+that truly serves our identified user needs while staying within technical and time constraints.
+_________________________________________________________________________________________

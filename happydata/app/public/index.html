@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HappyData - Global Development & Happiness Visualization</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <span>HappyData</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#visualizations" class="nav-link">Visualizations</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Explore Global Happiness & Development</h1>
+            <p class="hero-subtitle">
+                Discover the relationships between economic development indicators and human well-being across the globe
+            </p>
+            <button class="hero-cta" onclick="scrollToSection('visualizations')">
+                Start Exploring
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="hero-visual">
+            <div class="globe-container">
+                <div class="globe"></div>
+                <div class="orbit orbit-1"></div>
+                <div class="orbit orbit-2"></div>
+                <div class="orbit orbit-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualizations Section -->
+    <section id="visualizations" class="visualizations">
+        <div class="container">
+            <h2 class="section-title">Data Visualizations</h2>
+            <p class="section-subtitle">Choose from our interactive visualization tools to explore global data</p>
+            
+            <!-- Visualization Cards -->
+            <div class="viz-grid">
+                <div class="viz-card" data-viz="country-trends">
+                    <div class="viz-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Country Indicator Trends</h3>
+                    <p>Track how development indicators change over time for specific countries</p>
+                    <div class="viz-status">Available</div>
+                </div>
+
+                <div class="viz-card" data-viz="happiness-comparison">
+                    <div class="viz-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Happiness vs Indicators</h3>
+                    <p>Compare happiness levels with various development indicators</p>
+                    <div class="viz-status">Available</div>
+                </div>
+
+                <div class="viz-card" data-viz="regional-happiness">
+                    <div class="viz-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Regional Happiness</h3>
+                    <p>Visualize happiness distribution across World Bank regions</p>
+                    <div class="viz-status">Available</div>
+                </div>
+
+                <div class="viz-card" data-viz="regional-snapshot">
+                    <div class="viz-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Regional Snapshot</h3>
+                    <p>Compare indicator values across countries within regions</p>
+                    <div class="viz-status">Available</div>
+                </div>
+
+                <div class="viz-card" data-viz="india-dashboard">
+                    <div class="viz-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>India Dashboard</h3>
+                    <p>Specialized dashboard focusing on India's key happiness indicators</p>
+                    <div class="viz-status special">Extra Credit</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization Interface -->
+    <section id="viz-interface" class="viz-interface hidden">
+        <div class="container">
+            <div class="interface-header">
+                <button class="back-btn" onclick="hideVizInterface()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Visualizations
+                </button>
+                <h2 id="viz-title">Visualization</h2>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="country-select">Select Country:</label>
+                    <select id="country-select" class="form-select">
+                        <option value="">Loading countries...</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="indicator-select">Select Indicator:</label>
+                    <select id="indicator-select" class="form-select">
+                        <option value="">Loading indicators...</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="year-range">Year Range:</label>
+                    <div class="year-range-container">
+                        <input type="range" id="year-start" min="2000" max="2023" value="2000" class="year-slider">
+                        <span id="year-display">2000 - 2023</span>
+                        <input type="range" id="year-end" min="2000" max="2023" value="2023" class="year-slider">
+                    </div>
+                </div>
+
+                <button class="generate-btn" onclick="generateVisualization()">
+                    <i class="fas fa-chart-line"></i>
+                    Generate Visualization
+                </button>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <div class="chart-loading hidden">
+                    <div class="spinner"></div>
+                    <p>Loading visualization...</p>
+                </div>
+                <canvas id="main-chart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About HappyData</h2>
+                    <p>
+                        HappyData is a comprehensive data visualization platform that helps users explore the relationships 
+                        between economic development indicators and human well-being across the globe.
+                    </p>
+                    <p>
+                        Our platform integrates data from the World Bank Indicators API and World Happiness Report to provide 
+                        meaningful insights for students, researchers, and curious citizens interested in global development.
+                    </p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-database"></i>
+                            <span>Real-time global data</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Interactive visualizations</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Educational insights</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="data-points">
+                        <div class="data-point" style="--delay: 0s;">
+                            <div class="point"></div>
+                            <span>Global Happiness</span>
+                        </div>
+                        <div class="data-point" style="--delay: 0.5s;">
+                            <div class="point"></div>
+                            <span>Economic Indicators</span>
+                        </div>
+                        <div class="data-point" style="--delay: 1s;">
+                            <div class="point"></div>
+                            <span>Regional Analysis</span>
+                        </div>
+                        <div class="data-point" style="--delay: 1.5s;">
+                            <div class="point"></div>
+                            <span>Development Trends</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>HappyData</h3>
+                    <p>Exploring happiness and development through data visualization</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Data Sources</h4>
+                    <ul>
+                        <li><a href="#">World Bank Indicators API</a></li>
+                        <li><a href="#">World Happiness Report</a></li>
+                        <li><a href="#">World Bank Country Classification</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Developed by</h4>
+                    <p>Group 26 - SE Course Project</p>
+                    <p>2023ED15028 • 2023ED15005 • 2023ED15010</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
