@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from app.models import Country, Indicator, WorldBankData, HappinessData
+from app.models import Country, Indicator, WorldBankData
 import requests
 import json
 import time
@@ -17,8 +17,8 @@ class Command(BaseCommand):
         # Populate indicators
         self.populate_indicators()
         
-        # Populate sample data
-        self.populate_sample_data()
+        # Note: Happiness data will be fetched dynamically from APIs
+        self.stdout.write('Happiness data will be fetched dynamically from World Happiness Report API')
         
         self.stdout.write(self.style.SUCCESS('Initial data population completed!'))
 
@@ -185,73 +185,6 @@ class Command(BaseCommand):
                 indicator.save()
                 self.stdout.write(f'Updated indicator: {indicator.name}')
 
-    def populate_sample_data(self):
-        """Populate sample happiness data"""
-        self.stdout.write('Populating sample happiness data...')
-        
-        # Sample happiness data for key countries
-        sample_happiness_data = [
-            # United States
-            {'country': 'US', 'year': 2020, 'happiness_score': 6.94, 'gdp_per_capita': 1.398, 'social_support': 1.471, 'healthy_life_expectancy': 0.879},
-            {'country': 'US', 'year': 2021, 'happiness_score': 6.95, 'gdp_per_capita': 1.414, 'social_support': 1.459, 'healthy_life_expectancy': 0.884},
-            {'country': 'US', 'year': 2022, 'happiness_score': 6.92, 'gdp_per_capita': 1.446, 'social_support': 1.454, 'healthy_life_expectancy': 0.879},
-            {'country': 'US', 'year': 2023, 'happiness_score': 6.89, 'gdp_per_capita': 1.456, 'social_support': 1.448, 'healthy_life_expectancy': 0.877},
-            
-            # India
-            {'country': 'IN', 'year': 2020, 'happiness_score': 3.82, 'gdp_per_capita': 0.745, 'social_support': 0.765, 'healthy_life_expectancy': 0.588},
-            {'country': 'IN', 'year': 2021, 'happiness_score': 3.78, 'gdp_per_capita': 0.751, 'social_support': 0.761, 'healthy_life_expectancy': 0.594},
-            {'country': 'IN', 'year': 2022, 'happiness_score': 3.85, 'gdp_per_capita': 0.774, 'social_support': 0.771, 'healthy_life_expectancy': 0.601},
-            {'country': 'IN', 'year': 2023, 'happiness_score': 4.04, 'gdp_per_capita': 0.789, 'social_support': 0.782, 'healthy_life_expectancy': 0.606},
-            
-            # Germany
-            {'country': 'DE', 'year': 2020, 'happiness_score': 7.04, 'gdp_per_capita': 1.373, 'social_support': 1.454, 'healthy_life_expectancy': 0.861},
-            {'country': 'DE', 'year': 2021, 'happiness_score': 7.16, 'gdp_per_capita': 1.385, 'social_support': 1.467, 'healthy_life_expectancy': 0.867},
-            {'country': 'DE', 'year': 2022, 'happiness_score': 7.18, 'gdp_per_capita': 1.395, 'social_support': 1.471, 'healthy_life_expectancy': 0.873},
-            {'country': 'DE', 'year': 2023, 'happiness_score': 7.22, 'gdp_per_capita': 1.402, 'social_support': 1.475, 'healthy_life_expectancy': 0.878},
-            
-            # Japan
-            {'country': 'JP', 'year': 2020, 'happiness_score': 5.94, 'gdp_per_capita': 1.302, 'social_support': 1.317, 'healthy_life_expectancy': 0.986},
-            {'country': 'JP', 'year': 2021, 'happiness_score': 5.91, 'gdp_per_capita': 1.298, 'social_support': 1.315, 'healthy_life_expectancy': 0.988},
-            {'country': 'JP', 'year': 2022, 'happiness_score': 5.95, 'gdp_per_capita': 1.305, 'social_support': 1.319, 'healthy_life_expectancy': 0.991},
-            {'country': 'JP', 'year': 2023, 'happiness_score': 5.97, 'gdp_per_capita': 1.312, 'social_support': 1.322, 'healthy_life_expectancy': 0.994},
-            
-            # Brazil
-            {'country': 'BR', 'year': 2020, 'happiness_score': 6.11, 'gdp_per_capita': 0.986, 'social_support': 1.415, 'healthy_life_expectancy': 0.776},
-            {'country': 'BR', 'year': 2021, 'happiness_score': 6.08, 'gdp_per_capita': 0.981, 'social_support': 1.411, 'healthy_life_expectancy': 0.773},
-            {'country': 'BR', 'year': 2022, 'happiness_score': 6.13, 'gdp_per_capita': 0.994, 'social_support': 1.418, 'healthy_life_expectancy': 0.778},
-            {'country': 'BR', 'year': 2023, 'happiness_score': 6.16, 'gdp_per_capita': 1.001, 'social_support': 1.422, 'healthy_life_expectancy': 0.781},
-            
-            # Norway
-            {'country': 'NO', 'year': 2020, 'happiness_score': 7.49, 'gdp_per_capita': 1.566, 'social_support': 1.533, 'healthy_life_expectancy': 0.863},
-            {'country': 'NO', 'year': 2021, 'happiness_score': 7.39, 'gdp_per_capita': 1.554, 'social_support': 1.526, 'healthy_life_expectancy': 0.866},
-            {'country': 'NO', 'year': 2022, 'happiness_score': 7.42, 'gdp_per_capita': 1.561, 'social_support': 1.529, 'healthy_life_expectancy': 0.869},
-            {'country': 'NO', 'year': 2023, 'happiness_score': 7.43, 'gdp_per_capita': 1.564, 'social_support': 1.531, 'healthy_life_expectancy': 0.872},
-        ]
-        
-        for data in sample_happiness_data:
-            try:
-                country = Country.objects.get(code=data['country'])
-                happiness_data, created = HappinessData.objects.get_or_create(
-                    country=country,
-                    year=data['year'],
-                    defaults={
-                        'happiness_score': data['happiness_score'],
-                        'gdp_per_capita': data.get('gdp_per_capita'),
-                        'social_support': data.get('social_support'),
-                        'healthy_life_expectancy': data.get('healthy_life_expectancy'),
-                        'freedom_to_make_life_choices': data.get('freedom_to_make_life_choices'),
-                        'generosity': data.get('generosity'),
-                        'perceptions_of_corruption': data.get('perceptions_of_corruption'),
-                    }
-                )
-                if created:
-                    self.stdout.write(f'Created happiness data: {country.name} ({data["year"]})')
-                else:
-                    self.stdout.write(f'Happiness data already exists: {country.name} ({data["year"]})')
-            except Country.DoesNotExist:
-                self.stdout.write(f'Country {data["country"]} not found')
-        
-        self.stdout.write(self.style.SUCCESS(f'Sample data population completed!'))
 
     def fetch_worldbank_data_for_country(self, country_code, indicator_code, start_year=2015, end_year=2023):
         """Fetch World Bank data for a specific country and indicator"""

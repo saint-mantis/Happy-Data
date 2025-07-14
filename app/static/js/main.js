@@ -106,15 +106,7 @@ async function loadCountries() {
         populateCountrySelect();
     } catch (error) {
         console.error('Error loading countries:', error);
-        // Mock data for development
-        countries = [
-            { code: 'US', name: 'United States' },
-            { code: 'IN', name: 'India' },
-            { code: 'CN', name: 'China' },
-            { code: 'BR', name: 'Brazil' },
-            { code: 'DE', name: 'Germany' }
-        ];
-        populateCountrySelect();
+        showError('Failed to load countries. Please refresh the page.');
     }
 }
 
@@ -128,15 +120,7 @@ async function loadIndicators() {
         populateIndicatorSelect();
     } catch (error) {
         console.error('Error loading indicators:', error);
-        // Mock data for development
-        indicators = [
-            { code: 'NY.GDP.PCAP.CD', name: 'GDP per capita (current US$)' },
-            { code: 'SI.POV.DDAY', name: 'Poverty headcount ratio' },
-            { code: 'SP.POP.TOTL', name: 'Population, total' },
-            { code: 'SL.UEM.TOTL.ZS', name: 'Unemployment, total (% of total labor force)' },
-            { code: 'SE.PRM.NENR', name: 'School enrollment, primary (% net)' }
-        ];
-        populateIndicatorSelect();
+        showError('Failed to load indicators. Please refresh the page.');
     }
 }
 
@@ -295,103 +279,15 @@ async function fetchVisualizationData(vizType, params) {
     } catch (error) {
         console.error('Error fetching visualization data:', error);
         
-        // Return mock data for development
-        return generateMockData(vizType, params);
+        // Return error data structure
+        return {
+            labels: [],
+            datasets: [],
+            error: 'Failed to fetch data from API'
+        };
     }
 }
 
-// Generate mock data for development
-function generateMockData(vizType, params) {
-    const years = [];
-    for (let year = parseInt(params.startYear); year <= parseInt(params.endYear); year++) {
-        years.push(year);
-    }
-    
-    const mockData = {
-        labels: years,
-        datasets: []
-    };
-    
-    switch (vizType) {
-        case 'country-trends':
-            mockData.datasets.push({
-                label: indicators.find(i => i.code === params.indicator)?.name || 'Indicator',
-                data: years.map(() => Math.random() * 100 + 50),
-                borderColor: 'rgb(37, 99, 235)',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                tension: 0.4,
-                fill: true
-            });
-            break;
-            
-        case 'happiness-comparison':
-            mockData.datasets.push({
-                label: 'Happiness Score',
-                data: years.map(() => Math.random() * 3 + 5),
-                borderColor: 'rgb(16, 185, 129)',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                tension: 0.4,
-                yAxisID: 'y1'
-            });
-            mockData.datasets.push({
-                label: indicators.find(i => i.code === params.indicator)?.name || 'Indicator',
-                data: years.map(() => Math.random() * 100 + 50),
-                borderColor: 'rgb(37, 99, 235)',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                tension: 0.4,
-                yAxisID: 'y'
-            });
-            break;
-            
-        case 'regional-happiness':
-            mockData.labels = ['East Asia & Pacific', 'Europe & Central Asia', 'Latin America & Caribbean', 'Middle East & North Africa', 'North America', 'South Asia', 'Sub-Saharan Africa'];
-            mockData.datasets.push({
-                label: 'Average Happiness Score',
-                data: mockData.labels.map(() => Math.random() * 3 + 4),
-                backgroundColor: [
-                    'rgba(37, 99, 235, 0.8)',
-                    'rgba(16, 185, 129, 0.8)',
-                    'rgba(245, 158, 11, 0.8)',
-                    'rgba(239, 68, 68, 0.8)',
-                    'rgba(139, 92, 246, 0.8)',
-                    'rgba(236, 72, 153, 0.8)',
-                    'rgba(34, 197, 94, 0.8)'
-                ],
-                borderWidth: 1
-            });
-            break;
-            
-        case 'regional-snapshot':
-            mockData.labels = ['Country A', 'Country B', 'Country C', 'Country D', 'Country E'];
-            mockData.datasets.push({
-                label: indicators.find(i => i.code === params.indicator)?.name || 'Indicator',
-                data: mockData.labels.map(() => Math.random() * 100 + 20),
-                backgroundColor: 'rgba(37, 99, 235, 0.8)',
-                borderColor: 'rgb(37, 99, 235)',
-                borderWidth: 1
-            });
-            break;
-            
-        case 'india-dashboard':
-            mockData.datasets.push({
-                label: 'Happiness Score',
-                data: years.map(() => Math.random() * 1 + 4),
-                borderColor: 'rgb(16, 185, 129)',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                tension: 0.4
-            });
-            mockData.datasets.push({
-                label: 'GDP per capita',
-                data: years.map(() => Math.random() * 1000 + 1500),
-                borderColor: 'rgb(37, 99, 235)',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                tension: 0.4
-            });
-            break;
-    }
-    
-    return mockData;
-}
 
 // Render chart
 function renderChart(data) {

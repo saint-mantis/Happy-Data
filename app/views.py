@@ -3,16 +3,13 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import Q, Avg, Count
-from django.http import JsonResponse
-import requests
-import json
-from datetime import datetime
+from django.db.models import Avg, Count
 from .models import Country, Indicator, WorldBankData, HappinessData, RegionalData
 from .serializers import (
     CountrySerializer, IndicatorSerializer, WorldBankDataSerializer,
     HappinessDataSerializer, RegionalDataSerializer, VisualizationDataSerializer
 )
+from .services import DataFetchingService, HappinessDataService
 
 def index(request):
     return render(request, 'index.html')
@@ -107,7 +104,7 @@ class CountryTrendsVisualizationView(APIView):
             
             # If no data in database, try to fetch from API
             if not data.exists():
-                self.fetch_worldbank_data(country, indicator, start_year, end_year)
+                DataFetchingService.fetch_worldbank_data(country, indicator, start_year, end_year)
                 data = WorldBankData.objects.filter(
                     country__code=country,
                     indicator__code=indicator,
@@ -176,6 +173,16 @@ class HappinessComparisonVisualizationView(APIView):
                 country__code=country,
                 year__range=[start_year, end_year]
             ).order_by('year')
+            
+            # If no happiness data available, try to fetch from service
+            if not happiness_data.exists():
+                for year in range(start_year, end_year + 1):
+                    HappinessDataService.fetch_and_store_happiness_data(country, year)
+                
+                happiness_data = HappinessData.objects.filter(
+                    country__code=country,
+                    year__range=[start_year, end_year]
+                ).order_by('year')
             
             # Create aligned data
             years = []
@@ -437,44 +444,6 @@ class IndiaDashboardVisualizationView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-    def fetch_worldbank_data(self, country, indicator, start_year, end_year):
-        """Fetch data from World Bank API"""
-        try:
-            url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator}"
-            params = {
-                'format': 'json',
-                'date': f'{start_year}:{end_year}',
-                'per_page': 100
-            }
-            
-            response = requests.get(url, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                if len(data) > 1:
-                    # Create or update country
-                    country_obj, created = Country.objects.get_or_create(
-                        code=country,
-                        defaults={'name': country}
-                    )
-                    
-                    # Create or update indicator
-                    indicator_obj, created = Indicator.objects.get_or_create(
-                        code=indicator,
-                        defaults={'name': indicator}
-                    )
-                    
-                    # Save data
-                    for item in data[1]:
-                        if item['value'] is not None:
-                            WorldBankData.objects.update_or_create(
-                                country=country_obj,
-                                indicator=indicator_obj,
-                                year=item['date'],
-                                defaults={'value': item['value']}
-                            )
-                            
-        except Exception as e:
-            print(f"Error fetching World Bank data: {e}")
 
 @api_view(['GET'])
 def get_regions(request):
